@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'ChatBird_Example' do
+  pod 'ChatBird', :path => '../'
+
+  target 'ChatBird_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
