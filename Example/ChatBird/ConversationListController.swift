@@ -9,23 +9,19 @@
 import UIKit
 import SendBirdSDK
 
-class ChatListController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ConversationListController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    @IBOutlet weak var tableView: UITableView!
+    
+    
     private var query: SBDGroupChannelListQuery?
     private var channels: [SBDGroupChannel] = []
-    private var tableView = UITableView(frame: .zero)
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        tableView.dataSource = self
-        tableView.delegate = self
+        if SBDMain.getCurrentUser() != nil {
+            loadChannels(refresh: true)
+        }
     }
     
     func loadChannels(refresh: Bool) {
@@ -59,13 +55,13 @@ class ChatListController: UIViewController, UITableViewDelegate, UITableViewData
             }
 
             if let error = error {
-                print("error: \(error)")
+                print("** Group channel query error: \(error)")
             }
         }
     }
     
     func updateConversations() {
-        
+        tableView.reloadData()
     }
     
     func checkNoContent() {
@@ -77,10 +73,42 @@ class ChatListController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "conversationListTableViewCell", for: indexPath) as! ConversationListTableViewCell
+        cell.setup(channel: channels[indexPath.row])
+
+        if channels.count > 0 && indexPath.row == channels.count - 1 {
+            loadChannels(refresh: false)
+        }
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+    }
+}
+
+extension SBDGroupChannel {
+    var membersString: String {
+        let members = membersArray
+
+        switch members.count {
+        case 0:
+            // no other members in chat except self
+            return "Waiting for Participants..."
+        case 1:
+            // one other member so return full name of other participant
+            return membersArray.compactMap { $0.nickname }.joined(separator: ", ")
+        default:
+            // return first name of members sorted by last name
+            return membersArray.compactMap { $0.nickname?.components(separatedBy: " ") }
+                .sorted(by: { $0.last ?? "" < $1.last ?? "" })
+                .compactMap { $0.first }
+                .joined(separator: ", ")
+        }
+    }
+
+    var membersArray: [SBDMember] {
+        let members: [SBDMember] = (self.members ?? []).compactMap { $0 as? SBDMember }
+        return members.compactMap { $0.userId == SBDMain.getCurrentUser()?.userId ? nil : $0 }
     }
 }
