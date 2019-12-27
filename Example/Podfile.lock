@@ -1,10 +1,12 @@
 PODS:
   - ChatBird (0.1.0):
+    - Chatto
+    - ChattoAdditions
     - SendBirdSDK
   - Chatto (3.5.0)
   - ChattoAdditions (3.5.0):
     - Chatto
-  - SendBirdSDK (3.0.161)
+  - SendBirdSDK (3.0.162)
 
 DEPENDENCIES:
   - ChatBird (from `../`)
@@ -23,10 +25,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ChatBird: d2695648ca58184f9def2d479d24dd5aa1e0ae14
+  ChatBird: 257de81dd1cf1289d8fb8d0c34b7a0152c03ce9b
   Chatto: 3b4d5b8c56156dfa94caafc2bd4b3b42efb809a0
   ChattoAdditions: abd81bf223d15b4cdd82e23d675a2a286c150d56
-  SendBirdSDK: fae108b5757e21250d7cd32f4ff023075d7c06ae
+  SendBirdSDK: f88ff401c826d983c1db7846564ce4ff224110a2
 
 PODFILE CHECKSUM: 0953a239a9677552ae2ab02a1bbebf712b36ed39
 

@@ -51,11 +51,16 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="4dQ-gj-9jO">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="X8C-5i-NGV" firstAttribute="centerX" secondItem="90h-WA-v48" secondAttribute="centerX" id="985-IT-HbK"/>
                             <constraint firstItem="mPu-9Q-ZCU" firstAttribute="centerY" secondItem="90h-WA-v48" secondAttribute="centerY" id="F0T-bZ-6Hg"/>
+                            <constraint firstItem="4dQ-gj-9jO" firstAttribute="centerY" secondItem="90h-WA-v48" secondAttribute="centerY" id="RSq-1l-jWI"/>
+                            <constraint firstItem="4dQ-gj-9jO" firstAttribute="centerX" secondItem="90h-WA-v48" secondAttribute="centerX" id="YQQ-eP-ePl"/>
                             <constraint firstItem="mPu-9Q-ZCU" firstAttribute="leading" secondItem="90h-WA-v48" secondAttribute="leadingMargin" constant="8" id="a3b-RJ-jSf"/>
                             <constraint firstAttribute="trailingMargin" secondItem="mPu-9Q-ZCU" secondAttribute="trailing" constant="8" id="ct6-Fq-fJ4"/>
                             <constraint firstItem="X8C-5i-NGV" firstAttribute="top" secondItem="BSl-lb-IeO" secondAttribute="bottom" constant="8" id="kV9-KD-TTz"/>
@@ -63,6 +68,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Login" id="Qhq-k6-SUx"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="4dQ-gj-9jO" id="LXE-Dl-NdJ"/>
                         <outlet property="userField" destination="sJf-ZT-rIY" id="Qsq-rl-Qcx"/>
                         <segue destination="qvw-Q3-6d3" kind="presentation" identifier="loginSuccessSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="8RF-IL-Cvn"/>
                     </connections>
@@ -266,6 +272,6 @@
         <image name="message.circle.fill" catalog="system" width="64" height="60"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="7YZ-dK-20e"/>
+        <segue reference="8RF-IL-Cvn"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -47,9 +47,8 @@ class ConversationListTableViewCell: UITableViewCell {
     }
 
     func stringForTime(_ date: Date) -> String {
-        guard let utc = TimeZone(identifier: "UTC") else { return "" }
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = utc
+        calendar.timeZone = TimeZone.current
         let current = Date()
 
         if calendar.isDateInToday(date) {
