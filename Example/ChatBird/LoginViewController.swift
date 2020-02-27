@@ -8,6 +8,7 @@
 
 import UIKit
 import ChatBird
+import SendBirdSDK
 
 class LoginViewController: UIViewController {
     
@@ -24,10 +25,8 @@ class LoginViewController: UIViewController {
                 print("** SendBird connection error")
                 return
             }
-            
-            //            ChatManager.shared.updateUnreadMessageCount()
-            print("** Connected to SendBird")
-            UserDefaults.standard.set(ChatBirdManager.shared.currentUserId(), forKey: "sendbird_user_id")
+
+            UserDefaults.standard.set(SBDMain.getCurrentUser()?.userId, forKey: "sendbird_user_id")
             
             DispatchQueue.main.async {
                 self?.performSegue(withIdentifier: "loginSuccessSegue", sender: nil)

@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ChatController.swift
 //  ChatBird
 //
 //  Created by David Rajan on 12/05/2019.
@@ -8,20 +8,38 @@
 
 import UIKit
 import SendBirdSDK
+import ChatBird
 
-class ConversationListController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ChatListController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    deinit {
+        if let messageObserver = messageToken {
+            SBDMain.remove(observer: messageObserver)
+        }
+        if let userObserver = userToken {
+            SBDMain.remove(observer: userObserver)
+        }
+    }
+    
     @IBOutlet weak var tableView: UITableView!
-    
-    
+    @IBOutlet weak var noContentView: UIView!
+
     private var query: SBDGroupChannelListQuery?
     private var channels: [SBDGroupChannel] = []
+    private var messageToken: ChannelObservervation?
+    private var userToken: ChannelObservervation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard SBDMain.getCurrentUser() != nil else { return }
+        
+        loadChannels(refresh: true)
+        addMessageObserver()
+        addUserObserver()
+    }
 
-        if SBDMain.getCurrentUser() != nil {
-            loadChannels(refresh: true)
-        }
+    @IBAction func createChat() {
+        performSegue(withIdentifier: "newChatSegue", sender: nil)
     }
     
     func loadChannels(refresh: Bool) {
@@ -64,8 +82,22 @@ class ConversationListController: UIViewController, UITableViewDelegate, UITable
         tableView.reloadData()
     }
     
+    private func updateChannel(_ channel: SBDBaseChannel) {
+        guard let channel = channel as? SBDGroupChannel else { return }
+        DispatchQueue.main.async { [weak self] in
+            if let index = self?.channels.firstIndex(where: { $0.channelUrl == channel.channelUrl }) {
+                self?.channels.swapAt(0, index)
+            }
+            else {
+                self?.channels.insert(channel, at: 0)
+            }
+
+            self?.updateConversations()
+        }
+    }
+    
     func checkNoContent() {
-        
+        noContentView.isHidden = channels.count > 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -83,7 +115,40 @@ class ConversationListController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let channel = channels[indexPath.row]
+        performSegue(withIdentifier: "groupChannelSegue", sender: channel)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let vc = segue.destination as? GroupChannelViewController, let channel = sender as? SBDGroupChannel else { return }
+        vc.hidesBottomBarWhenPushed = true
+        vc.setup(with: channel)
+    }
+    
+    func addMessageObserver() {
+        messageToken = SBDMain.addMessage(observer: { [weak self] event in
+            guard let self = self else { return }
+            switch event {
+            case .received(let channel, _):
+                self.updateChannel(channel)
+            case .updated(let channel, _):
+                self.updateChannel(channel)
+            case .deleted(let channel, _):
+                self.updateChannel(channel)
+            }
+        })
+    }
+
+    func addUserObserver() {
+        userToken = SBDMain.addUser(observer: { [weak self] (channel, _) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                if self.channels.firstIndex(of: channel) == nil {
+                    self.channels.insert(channel, at: 0)
+                }
+                self.updateConversations()
+            }
+        })
     }
 }
 

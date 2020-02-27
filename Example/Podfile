@@ -6,6 +6,7 @@ target 'ChatBird_Example' do
   pod 'SendBirdSDK'
   pod 'Chatto'
   pod 'ChattoAdditions'
+  pod 'RSKImageCropper'
 
   target 'ChatBird_Tests' do
     inherit! :search_paths

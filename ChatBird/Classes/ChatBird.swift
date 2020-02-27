@@ -34,16 +34,24 @@ public class ChatBirdManager {
             completion(user, error)
         }
     }
-    
-    public func currentUserId() -> String? {
-        return SBDMain.getCurrentUser()?.userId
-    }
 
     public func disconnectSendBird(_ completion: @escaping () -> Void) {
         SBDMain.disconnect {
             self.update(token: nil)
             UserDefaults.standard.removeObject(forKey: "sendbird_user_id")
             completion()
+        }
+    }
+    
+    public func updateUnreadMessageCount() {
+        SBDMain.getTotalUnreadMessageCount { (unreadCount, error) in
+            if error != nil {
+                print("** SendBird error getting unread count: \(error?.localizedDescription ?? "")")
+                return
+            }
+
+            UIApplication.shared.applicationIconBadgeNumber = Int(unreadCount)
+            print("** SendBird got \(unreadCount) unread messages")
         }
     }
 }

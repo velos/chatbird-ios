@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '12.0'
   s.swift_version = '5.0'
   s.source_files = 'ChatBird/Classes/**/*'
+  s.resources = 'ChatBird/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}'
   
   # s.resource_bundles = {
   #   'ChatBird' => ['ChatBird/Assets/*.png']
@@ -41,4 +42,5 @@ Pod::Spec.new do |s|
   s.dependency 'SendBirdSDK'
   s.dependency 'Chatto'
   s.dependency 'ChattoAdditions'
+  s.dependency 'Nuke'
 end
