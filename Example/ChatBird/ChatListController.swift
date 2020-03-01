@@ -10,6 +10,7 @@ import UIKit
 import SendBirdSDK
 import ChatBird
 
+/// Basic implementation of chat list view
 class ChatListController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     deinit {
         if let messageObserver = messageToken {
@@ -38,6 +39,7 @@ class ChatListController: UIViewController, UITableViewDelegate, UITableViewData
         addUserObserver()
     }
 
+    /// Creates new chat on SendBird
     @IBAction func createChat() {
         performSegue(withIdentifier: "newChatSegue", sender: nil)
     }
@@ -82,6 +84,7 @@ class ChatListController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.reloadData()
     }
     
+    /// Updates channel when callback received
     private func updateChannel(_ channel: SBDBaseChannel) {
         guard let channel = channel as? SBDGroupChannel else { return }
         DispatchQueue.main.async { [weak self] in
@@ -125,6 +128,7 @@ class ChatListController: UIViewController, UITableViewDelegate, UITableViewData
         vc.setup(with: channel)
     }
     
+    /// Listens for message event callback
     func addMessageObserver() {
         messageToken = SBDMain.addMessage(observer: { [weak self] event in
             guard let self = self else { return }
@@ -139,6 +143,7 @@ class ChatListController: UIViewController, UITableViewDelegate, UITableViewData
         })
     }
 
+    /// Listens for user event callback
     func addUserObserver() {
         userToken = SBDMain.addUser(observer: { [weak self] (channel, _) in
             DispatchQueue.main.async { [weak self] in
@@ -149,31 +154,5 @@ class ChatListController: UIViewController, UITableViewDelegate, UITableViewData
                 self.updateConversations()
             }
         })
-    }
-}
-
-extension SBDGroupChannel {
-    var membersString: String {
-        let members = membersArray
-
-        switch members.count {
-        case 0:
-            // no other members in chat except self
-            return "Waiting for Participants..."
-        case 1:
-            // one other member so return full name of other participant
-            return membersArray.compactMap { $0.nickname }.joined(separator: ", ")
-        default:
-            // return first name of members sorted by last name
-            return membersArray.compactMap { $0.nickname?.components(separatedBy: " ") }
-                .sorted(by: { $0.last ?? "" < $1.last ?? "" })
-                .compactMap { $0.first }
-                .joined(separator: ", ")
-        }
-    }
-
-    var membersArray: [SBDMember] {
-        let members: [SBDMember] = (self.members ?? []).compactMap { $0 as? SBDMember }
-        return members.compactMap { $0.userId == SBDMain.getCurrentUser()?.userId ? nil : $0 }
     }
 }

@@ -149,7 +149,7 @@ class ChatDetailsMemberCell: UITableViewCell {
 
     func setup(with member: SBDMember?) {
         guard let member = member else {
-            memberLabel.text = "Add Member"
+            memberLabel.text = "Add Member (TODO: implement)"
             memberImageView.image = UIImage(named: "plus.circle.fill")
             accessoryType = .none
             return

@@ -18,12 +18,11 @@
 		630D7BF123AD87BE001024F9 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630D7BF023AD87BE001024F9 /* SettingsController.swift */; };
 		632CDCAB23DFD0560031ACBD /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632CDCAA23DFD0560031ACBD /* ProfileViewController.swift */; };
 		633129FA23A0743D00A83E90 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633129F923A0743D00A83E90 /* LoginViewController.swift */; };
-		6354EE5323E4DE810012419D /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6354EE5223E4DE810012419D /* ImageViewer.swift */; };
 		6354EE5523EA22690012419D /* NewChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6354EE5423EA22690012419D /* NewChatController.swift */; };
 		6354EE5723EE389A0012419D /* SetupChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6354EE5623EE389A0012419D /* SetupChatController.swift */; };
-		6358A72423BBEE3F00C5A381 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358A72323BBEE3F00C5A381 /* ChatViewController.swift */; };
 		6358A74823CFBC7F00C5A381 /* ChatDetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6358A74723CFBC7F00C5A381 /* ChatDetailsController.swift */; };
 		63625370239F13EF00CC918C /* ConversationListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6362536F239F13EF00CC918C /* ConversationListTableViewCell.swift */; };
+		63C172CE24089E0800CB0BD9 /* GroupChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C172CD24089E0800CB0BD9 /* GroupChannelViewController.swift */; };
 		D5195E9E42836ADE3F58CAD4 /* Pods_ChatBird_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEC2B1D333758F4105130BD8 /* Pods_ChatBird_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,12 +52,11 @@
 		630D7BF023AD87BE001024F9 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		632CDCAA23DFD0560031ACBD /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		633129F923A0743D00A83E90 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		6354EE5223E4DE810012419D /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		6354EE5423EA22690012419D /* NewChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatController.swift; sourceTree = "<group>"; };
 		6354EE5623EE389A0012419D /* SetupChatController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupChatController.swift; sourceTree = "<group>"; };
-		6358A72323BBEE3F00C5A381 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		6358A74723CFBC7F00C5A381 /* ChatDetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailsController.swift; sourceTree = "<group>"; };
 		6362536F239F13EF00CC918C /* ConversationListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListTableViewCell.swift; sourceTree = "<group>"; };
+		63C172CD24089E0800CB0BD9 /* GroupChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChannelViewController.swift; sourceTree = "<group>"; };
 		72BB0DCD5EE703FFF2BCB6FA /* Pods-ChatBird_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatBird_Example.debug.xcconfig"; path = "Target Support Files/Pods-ChatBird_Example/Pods-ChatBird_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		97DD0C7541E9492AB82867D5 /* Pods-ChatBird_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatBird_Tests.release.xcconfig"; path = "Target Support Files/Pods-ChatBird_Tests/Pods-ChatBird_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		AB1528CA301A45D1110CC959 /* Pods_ChatBird_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatBird_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,8 +121,8 @@
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
+				63C172CD24089E0800CB0BD9 /* GroupChannelViewController.swift */,
 				607FACD71AFB9204008FA782 /* ChatListController.swift */,
-				6358A72323BBEE3F00C5A381 /* ChatViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -135,7 +133,6 @@
 				630D7BF023AD87BE001024F9 /* SettingsController.swift */,
 				6358A74723CFBC7F00C5A381 /* ChatDetailsController.swift */,
 				632CDCAA23DFD0560031ACBD /* ProfileViewController.swift */,
-				6354EE5223E4DE810012419D /* ImageViewer.swift */,
 				6354EE5423EA22690012419D /* NewChatController.swift */,
 				6354EE5623EE389A0012419D /* SetupChatController.swift */,
 			);
@@ -375,12 +372,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6358A74823CFBC7F00C5A381 /* ChatDetailsController.swift in Sources */,
+				63C172CE24089E0800CB0BD9 /* GroupChannelViewController.swift in Sources */,
 				630D7BF123AD87BE001024F9 /* SettingsController.swift in Sources */,
 				630D7BEE23AAEABC001024F9 /* RootViewController.swift in Sources */,
-				6354EE5323E4DE810012419D /* ImageViewer.swift in Sources */,
 				633129FA23A0743D00A83E90 /* LoginViewController.swift in Sources */,
 				6354EE5723EE389A0012419D /* SetupChatController.swift in Sources */,
-				6358A72423BBEE3F00C5A381 /* ChatViewController.swift in Sources */,
 				63625370239F13EF00CC918C /* ConversationListTableViewCell.swift in Sources */,
 				632CDCAB23DFD0560031ACBD /* ProfileViewController.swift in Sources */,
 				6354EE5523EA22690012419D /* NewChatController.swift in Sources */,

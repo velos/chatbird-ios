@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SendBirdSDK
 
 extension UIImage {
     func round() -> UIImage {
@@ -71,5 +72,31 @@ extension String {
         let firstInitial = nameComponents.first?.first
         let lastInitial  = nameComponents.count > 1 ? nameComponents.last?.first : nil
         return (firstInitial != nil ? "\(firstInitial!)" : "") + (lastInitial != nil ? "\(lastInitial!)" : "")
+    }
+}
+
+extension SBDGroupChannel {
+    public var membersString: String {
+        let members = membersArray
+
+        switch members.count {
+        case 0:
+            // no other members in chat except self
+            return "Waiting for Participants..."
+        case 1:
+            // one other member so return full name of other participant
+            return membersArray.compactMap { $0.nickname }.joined(separator: ", ")
+        default:
+            // return first name of members sorted by last name
+            return membersArray.compactMap { $0.nickname?.components(separatedBy: " ") }
+                .sorted(by: { $0.last ?? "" < $1.last ?? "" })
+                .compactMap { $0.first }
+                .joined(separator: ", ")
+        }
+    }
+
+    public var membersArray: [SBDMember] {
+        let members: [SBDMember] = (self.members ?? []).compactMap { $0 as? SBDMember }
+        return members.compactMap { $0.userId == SBDMain.getCurrentUser()?.userId ? nil : $0 }
     }
 }

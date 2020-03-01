@@ -36,7 +36,6 @@ public class ChatBirdBaseMessageCellStyle: BaseMessageCollectionViewCellDefaultS
             colors: BaseMessageCollectionViewCellDefaultStyle.Colors(
                 incoming: UIColor(white: 241.0/255.0, alpha: 1),
                 outgoing: UIColor.systemBlue
-//                outgoing: UIColor(red: 2.0/255.0, green: 153.0/255.0, blue: 255.0/255.0, alpha: 1)
             ),
             bubbleBorderImages: BaseMessageCollectionViewCellDefaultStyle.BubbleBorderImages(
                 borderIncomingTail: UIImage(),

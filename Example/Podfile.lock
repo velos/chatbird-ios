@@ -9,7 +9,7 @@ PODS:
     - Chatto
   - Nuke (8.4.0)
   - RSKImageCropper (2.2.3)
-  - SendBirdSDK (3.0.168)
+  - SendBirdSDK (3.0.170)
 
 DEPENDENCIES:
   - ChatBird (from `../`)
@@ -36,8 +36,8 @@ SPEC CHECKSUMS:
   ChattoAdditions: abd81bf223d15b4cdd82e23d675a2a286c150d56
   Nuke: fa6f784c4f7e1c0f9313668510186c68b7af2509
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
-  SendBirdSDK: eed336f9c6026383f43eadb01a589836128e13e0
+  SendBirdSDK: e880e06fda5a34577b99406fc9dd6e1916bd2510
 
 PODFILE CHECKSUM: cf2e4cd4187f198006dd898b5b05c9e7fbcb3413
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.0

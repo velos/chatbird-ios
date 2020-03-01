@@ -12,8 +12,7 @@ import SendBirdSDK
 import Nuke
 
 class SettingsController: UITableViewController {
-    
-    
+
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nicknameLabel: UILabel!
     @IBOutlet weak var userIDLabel: UILabel!
