@@ -28,7 +28,7 @@ class ProfileViewController: UITableViewController {
         guard let member = member else { return }
 
         avatarView.setup(with: [member])
-        nicknameLabel.text = member.nickname
+        nicknameLabel.text = (member.nickname?.isEmpty ?? true) ? "(No nickname set)" : member.nickname
         userIDLabel.text = member.userId
         
         isUserBlocked = member.isBlockedByMe

@@ -30,9 +30,6 @@ import UIKit
 import Chatto
 import ChattoAdditions
 
-// This is a dirty implementation that shows what's needed to add a new type of element
-// @see DemoChatItemsDecorator
-
 public class NameModel: ChatItemProtocol {
     public let uid: String
     public static var chatItemType: ChatItemType {

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import ChatBird
 import SendBirdSDK
 
 class LoginViewController: UIViewController {
@@ -17,17 +16,26 @@ class LoginViewController: UIViewController {
     
     @IBAction func loginPressed(_ sender: Any) {
         activityIndicator.startAnimating()
-        ChatBirdManager.shared.connectSendBird(uuid: userField.text ?? "", token: nil) { [weak self] (user, error) in
-            
+        
+        SBDMain.connect(withUserId: userField.text ?? "", accessToken: nil) { [weak self] (user, error) in
             self?.activityIndicator.stopAnimating()
-            
+
             guard error == nil else {
                 print("** SendBird connection error")
                 return
             }
 
-            UserDefaults.standard.set(SBDMain.getCurrentUser()?.userId, forKey: "sendbird_user_id")
+            if user != nil, let pendingToken = SBDMain.getPendingPushToken() {
+                print("** SendBird registering pending token: \(pendingToken)")
+                SBDMain.registerDevicePushToken(pendingToken, unique: true, completionHandler: nil)
+            }
+            else {
+                print("** SendBird no registration needed")
+            }
             
+            UserDefaults.standard.set(SBDMain.getCurrentUser()?.userId, forKey: "sendbird_user_id")
+            print("** Connected to SendBird")
+
             DispatchQueue.main.async {
                 self?.performSegue(withIdentifier: "loginSuccessSegue", sender: nil)
             }

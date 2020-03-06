@@ -182,7 +182,7 @@ public class GroupChannelDataSource: ChatDataSourceProtocol {
     public func addPhotoMessage(_ image: UIImage) {
         let messageIndex = chatItems.count
         
-        let data = resizeForSending(image)
+        let data = image.resizeForSending()
         let message = channel.sendFileMessage(withBinaryData: data, filename: UUID().uuidString, type: "image/jpeg", size: UInt(data.count), data: nil) { [weak self] (fileMessage, error) in
             guard let self = self else { return }
             guard let sentMessage = fileMessage else {
@@ -197,18 +197,6 @@ public class GroupChannelDataSource: ChatDataSourceProtocol {
         append(messages: [message])
         
         self.delegate?.chatDataSourceDidUpdate(self)
-    }
-    
-    private func resizeForSending(_ image: UIImage) -> Data {
-        
-        let ratio = image.size.height / image.size.width
-        let newSize = CGSize(width: 600, height: ratio * 600)
-        
-        
-        return UIGraphicsImageRenderer(size: newSize)
-            .jpegData(withCompressionQuality: 0.8) { context in
-                image.draw(in: CGRect(origin: .zero, size: newSize))
-        }
     }
 }
 

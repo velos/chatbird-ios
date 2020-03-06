@@ -35,23 +35,19 @@ class SetupChatController: UIViewController, UIImagePickerControllerDelegate, UI
     @IBAction func imageButtonTapped(_ sender: Any) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let photoAction = UIAlertAction(title: "Take Photo", style: .default) { (action) in
-            DispatchQueue.main.async {
-                let mediaUI = UIImagePickerController()
-                mediaUI.sourceType = .camera
-                mediaUI.mediaTypes = [String(kUTTypeImage)]
-                mediaUI.delegate = self
-                self.present(mediaUI, animated: true, completion: nil)
-            }
+            let mediaUI = UIImagePickerController()
+            mediaUI.sourceType = .camera
+            mediaUI.mediaTypes = [String(kUTTypeImage)]
+            mediaUI.delegate = self
+            self.present(mediaUI, animated: true, completion: nil)
         }
         
         let libraryAction = UIAlertAction(title: "Choose from Library", style: .default) { (action) in
-            DispatchQueue.main.async {
-                let mediaUI = UIImagePickerController()
-                mediaUI.sourceType = .photoLibrary
-                mediaUI.mediaTypes = [String(kUTTypeImage)]
-                mediaUI.delegate = self
-                self.present(mediaUI, animated: true, completion: nil)
-            }
+            let mediaUI = UIImagePickerController()
+            mediaUI.sourceType = .photoLibrary
+            mediaUI.mediaTypes = [String(kUTTypeImage)]
+            mediaUI.delegate = self
+            self.present(mediaUI, animated: true, completion: nil)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         

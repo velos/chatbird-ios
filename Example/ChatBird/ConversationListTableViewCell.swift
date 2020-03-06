@@ -80,7 +80,7 @@ class ConversationListTableViewCell: UITableViewCell {
         timestampLabel.text = stringForTime(lastDate)
         
         avatarView.backgroundColor = .clear
-        avatarView.setup(with: channel.membersArray)
+        avatarView.setup(with: channel.otherMembersArray)
     }
 
     func stringForTime(_ date: Date) -> String {

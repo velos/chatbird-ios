@@ -28,15 +28,19 @@ extension SBDUserMessage: TextMessageModelProtocol {
 
 extension ViewModelBuilderProtocol {
     func updateImage(for name: String?, url: String?, observable: ChattoAdditions.Observable<UIImage?>) {
+        let placeholderImage = UIImage(named: "person.crop.circle.fill", in: .chatBird, compatibleWith: nil)
         guard let profileUrl = URL(string: url ?? "") else {
-            observable.value = UIImage(named: "person.crop.circle.fill", in: .chatBird, compatibleWith: nil)
+            observable.value = placeholderImage
             return
         }
         
         ImagePipeline.shared.loadImage(with: ImageRequest(url: profileUrl, processors: [ImageProcessor.Circle()])) { result in
             switch result {
-            case .success(let response): observable.value = response.image
-            case .failure(let error): print(error)
+            case .success(let response):
+                observable.value = response.image
+            case .failure(let error):
+                observable.value = placeholderImage
+                print(error)
             }
         }
     }

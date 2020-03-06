@@ -17,26 +17,12 @@ class ChatDetailsController: UITableViewController {
     @IBOutlet weak var chatImageView: UIImageView!
     @IBOutlet weak var chatNameLabel: UILabel!
     
-    private func rearrangeMembers() {
-        self.members.removeAll()
-        guard let currentUser = SBDMain.getCurrentUser(), let members = channel?.members as? [SBDMember] else { return }
-        
-        for member in members {
-            if member.userId == currentUser.userId {
-                self.members.insert(member, at: 0)
-            }
-            else {
-                self.members.append(member)
-            }
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        rearrangeMembers()
+        members = channel?.allMembersArray ?? []
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let vc = segue.destination as? ProfileViewController, let member = sender as? SBDMember else { return }
         vc.member = member
@@ -156,7 +142,7 @@ class ChatDetailsMemberCell: UITableViewCell {
         }
 
         let isCurrentUser = member.userId == SBDMain.getCurrentUser()?.userId
-        memberLabel.text = isCurrentUser ? "You" : (member.nickname ?? "")
+        memberLabel.text = isCurrentUser ? "You" : (member.displayName)
         if member.isBlockedByMe {
             memberLabel.text! += " (Blocked)"
         }

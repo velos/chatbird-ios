@@ -17,7 +17,7 @@ class SelectableUserTableViewCell: UITableViewCell {
     
     var user: SBDUser? {
         didSet {
-            nicknameLabel.text = (user?.nickname?.isEmpty ?? true) ? user?.userId : user?.nickname
+            nicknameLabel.text = user?.displayName
             guard let url = URL(string: user?.profileUrl ?? "") else {
                 profileView.image = UIImage(named: "person.crop.circle.fill", in: .chatBird, compatibleWith: nil)
                 return
@@ -59,7 +59,7 @@ class SelectedUserCollectionViewCell: UICollectionViewCell {
     
     var user: SBDUser? {
         didSet {
-            nicknameLabel.text = (user?.nickname?.isEmpty ?? true) ? user?.userId : user?.nickname
+            nicknameLabel.text = user?.displayName
             guard let url = URL(string: user?.profileUrl ?? "") else {
                 profileView.image = UIImage(named: "person.crop.circle.fill", in: .chatBird, compatibleWith: nil)
                 return

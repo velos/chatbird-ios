@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import ChatBird
 import SendBirdSDK
 import Nuke
 
@@ -33,7 +32,11 @@ class SettingsController: UITableViewController {
     }
     
     @IBAction func logoutTapped(_ sender: Any) {
-        ChatBirdManager.shared.disconnectSendBird { [weak self] in
+        SBDMain.disconnect { [weak self] in
+            SBDMain.unregisterAllPushToken(completionHandler: nil)
+            print("** SendBird Unregistering Push Token")
+
+            UserDefaults.standard.removeObject(forKey: "sendbird_user_id")
             self?.dismiss(animated: true, completion: nil)
         }
     }

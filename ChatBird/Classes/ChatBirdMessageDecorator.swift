@@ -96,7 +96,7 @@ public final class ChatBirdMessageDecorator: ChatItemsDecoratorProtocol {
                     decoratedChatItems.append(dateTimeStamp)
                 }
 
-                if addName, let name = (currentMessage as? UserMessageType)?.sender?.nickname {
+                if addName, let name = (currentMessage as? UserMessageType)?.sender?.displayName {
                     decoratedChatItems.append(
                         DecoratedChatItem(
                             chatItem: NameModel(uid: "\(currentMessage.uid)-decoration-name", name: name),

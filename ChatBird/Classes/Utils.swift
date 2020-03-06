@@ -57,6 +57,16 @@ extension UIImage {
             topImage.draw(at: topImageOrigin, blendMode: .normal, alpha: 0.8)
         }
     }
+    
+    func resizeForSending() -> Data {
+        let ratio = self.size.height / self.size.width
+        let newSize = CGSize(width: 600, height: ratio * 600)
+
+        return UIGraphicsImageRenderer(size: newSize)
+            .jpegData(withCompressionQuality: 0.8) { context in
+                self.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+    }
 }
 
 extension Bundle {
@@ -76,8 +86,9 @@ extension String {
 }
 
 extension SBDGroupChannel {
+    /// Returns sorted list of members to display - edit this to change sorting
     public var membersString: String {
-        let members = membersArray
+        let members = otherMembersArray
 
         switch members.count {
         case 0:
@@ -85,18 +96,35 @@ extension SBDGroupChannel {
             return "Waiting for Participants..."
         case 1:
             // one other member so return full name of other participant
-            return membersArray.compactMap { $0.nickname }.joined(separator: ", ")
+            return members.compactMap { $0.nickname }.joined(separator: ", ")
         default:
             // return first name of members sorted by last name
-            return membersArray.compactMap { $0.nickname?.components(separatedBy: " ") }
+            return members.compactMap { $0.nickname?.components(separatedBy: " ") }
                 .sorted(by: { $0.last ?? "" < $1.last ?? "" })
                 .compactMap { $0.first }
                 .joined(separator: ", ")
         }
     }
 
-    public var membersArray: [SBDMember] {
+    /// Returns array of all channel members
+    public var allMembersArray: [SBDMember] {
+        var allMembers = otherMembersArray
+        if let currentMember = self.getMember(SBDMain.getCurrentUser()?.userId ?? "") {
+            allMembers.insert(currentMember, at: 0)
+        }
+        return allMembers
+    }
+
+    /// Returns array of all channel members minus the current user
+    public var otherMembersArray: [SBDMember] {
         let members: [SBDMember] = (self.members ?? []).compactMap { $0 as? SBDMember }
         return members.compactMap { $0.userId == SBDMain.getCurrentUser()?.userId ? nil : $0 }
+    }
+}
+
+extension SBDUser {
+    /// Returns user's nickname (or userId, if missing) for display
+    public var displayName: String? {
+        return (self.nickname?.isEmpty ?? true) ? self.userId : self.nickname
     }
 }
