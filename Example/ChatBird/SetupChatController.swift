@@ -25,12 +25,6 @@ class SetupChatController: UIViewController, UIImagePickerControllerDelegate, UI
         super.viewDidLoad()
         
     }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-//        imageButton.layer.cornerRadius = imageButton.frame.width / 2.0
-    }
 
     @IBAction func imageButtonTapped(_ sender: Any) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
