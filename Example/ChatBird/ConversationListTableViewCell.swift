@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChatBird
 import SendBirdSDK
 
 class ConversationListTableViewCell: UITableViewCell {
@@ -14,28 +15,61 @@ class ConversationListTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var timestampLabel: UILabel!
-    @IBOutlet weak var avatarView: UIView!
+    @IBOutlet weak var avatarView: AvatarView!
     
+    let bgView = UIView()
     let dateFormatter = DateFormatter()
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        bgView.backgroundColor = .white
+        backgroundView = bgView
         dateFormatter.timeZone = TimeZone.current
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        if highlighted {
+            bgView.backgroundColor = UIColor.clear
+        }
+        else {
+            bgView.backgroundColor = .white
+        }
+    }
 
-        // Configure the view for the selected state
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        if selected {
+            bgView.backgroundColor = UIColor.clear
+        }
+        else {
+            bgView.backgroundColor = .white
+        }
     }
     
     func setup(channel: SBDGroupChannel) {
-        titleLabel.text = channel.membersString
+        titleLabel.text = channel.name.count > 0 ? channel.name : channel.membersString
         
         let lastDate: Date
         if let lastMessage = channel.lastMessage {
-            messageLabel.text = (lastMessage as? SBDUserMessage)?.message ?? "(Media)"
+            if let adminMessage = lastMessage as? SBDAdminMessage {
+                messageLabel.text = adminMessage.message ?? ""
+            }
+            else if let userMessage = lastMessage as? SBDUserMessage {
+                messageLabel.text = userMessage.message ?? ""
+            }
+            else if let fileMessage = lastMessage as? SBDFileMessage {
+                if fileMessage.type.hasPrefix("image") {
+                    messageLabel.text = "📷 Photo"
+                }
+                else if fileMessage.type.hasPrefix("video") {
+                    messageLabel.text = "🎥 Video"
+                }
+                else if fileMessage.type.hasPrefix("audio") {
+                    messageLabel.text = "🔈 Audio"
+                }
+                else {
+                    messageLabel.text = "📄 File"
+                }
+            }
             lastDate = Date(timeIntervalSince1970: Double(lastMessage.createdAt) / 1000.0)
         }
         else {
@@ -44,6 +78,9 @@ class ConversationListTableViewCell: UITableViewCell {
         }
         
         timestampLabel.text = stringForTime(lastDate)
+        
+        avatarView.backgroundColor = .clear
+        avatarView.setup(with: channel.otherMembersArray)
     }
 
     func stringForTime(_ date: Date) -> String {
