@@ -198,5 +198,26 @@ public class GroupChannelDataSource: ChatDataSourceProtocol {
         
         self.delegate?.chatDataSourceDidUpdate(self)
     }
+
+    public func resendTextMessage(_ message: SBDUserMessage) {
+        channel.resendUserMessage(with: message) { (sentMessage, error) in
+            guard sentMessage != nil else {
+                fatalError("Could not resend message: \(error!.localizedDescription)")
+            }
+            
+            self.delegate?.chatDataSourceDidUpdate(self)
+        }
+    }
+    
+    public func resendPhotoMessage(_ message: SBDFileMessage) {
+        channel.resendFileMessage(with: message, binaryData: message.image.jpegData(compressionQuality: 1.0)) { (fileMessage, error) in
+            guard fileMessage != nil else {
+                fatalError("Could not resend message: \(error!.localizedDescription)")
+            }
+            
+            self.delegate?.chatDataSourceDidUpdate(self)
+        }
+    }
+
 }
 
