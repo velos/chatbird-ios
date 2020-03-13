@@ -66,38 +66,8 @@ class ConversationListTableViewCell: UITableViewCell {
     
     func setup(channel: SBDGroupChannel) {
         titleLabel.text = channel.name.count > 0 ? channel.name : channel.membersString
-        
-        let lastDate: Date
-        if let lastMessage = channel.lastMessage {
-            if let adminMessage = lastMessage as? SBDAdminMessage {
-                messageLabel.text = adminMessage.message ?? ""
-            }
-            else if let userMessage = lastMessage as? SBDUserMessage {
-                messageLabel.text = userMessage.message ?? ""
-            }
-            else if let fileMessage = lastMessage as? SBDFileMessage {
-                if fileMessage.type.hasPrefix("image") {
-                    messageLabel.text = "📷 Photo"
-                }
-                else if fileMessage.type.hasPrefix("video") {
-                    messageLabel.text = "🎥 Video"
-                }
-                else if fileMessage.type.hasPrefix("audio") {
-                    messageLabel.text = "🔈 Audio"
-                }
-                else {
-                    messageLabel.text = "📄 File"
-                }
-            }
-            lastDate = Date(timeIntervalSince1970: Double(lastMessage.createdAt) / 1000.0)
-        }
-        else {
-            messageLabel.text = ""
-            lastDate = Date(timeIntervalSince1970: Double(channel.createdAt) / 1000.0)
-        }
-        
-        timestampLabel.text = stringForTime(lastDate)
-        
+        messageLabel.text = channel.lastMessageString
+        timestampLabel.text = channel.lastDateString
         avatarView.backgroundColor = .clear
         avatarView.setup(with: channel.otherMembersArray)
     }
