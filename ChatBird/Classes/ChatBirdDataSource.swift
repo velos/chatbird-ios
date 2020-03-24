@@ -206,7 +206,8 @@ public class GroupChannelDataSource: ChatDataSourceProtocol {
         let message = channel.sendFileMessage(withBinaryData: data, filename: UUID().uuidString, type: "image/jpeg", size: UInt(data.count), data: nil) { [weak self] (fileMessage, error) in
             guard let self = self else { return }
             guard let sentMessage = fileMessage else {
-                fatalError("Could not create message: \(error!.localizedDescription)")
+                print("Could not create message: \(error!.localizedDescription)")
+                return
             }
 
             self.chatItems[messageIndex] = sentMessage
@@ -218,5 +219,28 @@ public class GroupChannelDataSource: ChatDataSourceProtocol {
         
         self.delegate?.chatDataSourceDidUpdate(self)
     }
+
+    public func resendTextMessage(_ message: SBDUserMessage) {
+        channel.resendUserMessage(with: message) { (sentMessage, error) in
+            guard sentMessage != nil else {
+                print("Could not resend message: \(error!.localizedDescription)")
+                return
+            }
+            
+            self.delegate?.chatDataSourceDidUpdate(self)
+        }
+    }
+    
+    public func resendPhotoMessage(_ message: SBDFileMessage) {
+        channel.resendFileMessage(with: message, binaryData: message.image.jpegData(compressionQuality: 1.0)) { (fileMessage, error) in
+            guard fileMessage != nil else {
+                print("Could not resend message: \(error!.localizedDescription)")
+                return
+            }
+            
+            self.delegate?.chatDataSourceDidUpdate(self)
+        }
+    }
+
 }
 

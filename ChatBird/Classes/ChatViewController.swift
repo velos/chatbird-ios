@@ -169,7 +169,8 @@ public class FileMessageHandler: MessageHandlerProtocol {
     }
     
     public func userDidTapOnFailIcon(viewModel: MessageViewModelProtocol) {
-        
+        guard let viewModel = viewModel as? SBDFileMessageViewModel, let datasource = (presentingVC as? ChatViewController)?.dataSource else { return }
+        datasource.resendPhotoMessage(viewModel.fileMessage)
     }
     
     public func userDidTapOnAvatar(viewModel: MessageViewModelProtocol) {

@@ -49,6 +49,9 @@ open class BaseMessageHandler: MessageHandlerProtocol {
 
     public func userDidTapOnFailIcon(viewModel: MessageViewModelProtocol) {
         print("userDidTapOnFailIcon")
+        
+        guard let viewModel = viewModel as? SBDUserMessageViewModel, let datasource = (presentingVC as? ChatViewController)?.dataSource else { return }
+        datasource.resendTextMessage(viewModel.textMessage)
     }
 
     public func userDidTapOnAvatar(viewModel: MessageViewModelProtocol) {
