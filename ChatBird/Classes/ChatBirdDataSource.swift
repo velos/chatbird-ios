@@ -221,23 +221,32 @@ public class GroupChannelDataSource: ChatDataSourceProtocol {
     }
 
     public func resendTextMessage(_ message: SBDUserMessage) {
-        channel.resendUserMessage(with: message) { (sentMessage, error) in
-            guard sentMessage != nil else {
+        channel.resendUserMessage(with: message) { [weak self] (sentMessage, error) in
+            guard let self = self, let sentMessage = sentMessage else {
                 print("Could not resend message: \(error!.localizedDescription)")
                 return
             }
             
+            guard let index = self.chatItems.firstIndex(where: { ($0 as? SBDUserMessage)?.requestId == sentMessage.requestId }) else {
+                return
+            }
+            
+            self.chatItems[index] = sentMessage
             self.delegate?.chatDataSourceDidUpdate(self)
         }
     }
     
     public func resendPhotoMessage(_ message: SBDFileMessage) {
-        channel.resendFileMessage(with: message, binaryData: message.image.jpegData(compressionQuality: 1.0)) { (fileMessage, error) in
-            guard fileMessage != nil else {
+        channel.resendFileMessage(with: message, binaryData: message.image.jpegData(compressionQuality: 1.0)) { [weak self] (sentMessage, error) in
+            guard let self = self, let sentMessage = sentMessage else {
                 print("Could not resend message: \(error!.localizedDescription)")
                 return
             }
+            guard let index = self.chatItems.firstIndex(where: { ($0 as? SBDFileMessage)?.requestId == sentMessage.requestId }) else {
+                return
+            }
             
+            self.chatItems[index] = sentMessage
             self.delegate?.chatDataSourceDidUpdate(self)
         }
     }
