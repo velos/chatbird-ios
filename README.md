@@ -10,7 +10,7 @@
 
 ## Compatibility
 
-ChatBird requires **iOS 11+** and is compatible with **Swift 4.2** projects.
+ChatBird requires **iOS 12+** and is compatible with **Swift 5** projects.
 
 ## Installation
 
@@ -41,7 +41,7 @@ ChatBirdManager.shared.connectSendBird(uuid: "SendBird-user-id", token: "optiona
 
 ## Customizing the example
 
-You may now ChatBird experience as desired. The default implementation will give you a working chat controller but you can subclass `ChatViewController` to provide your own input presenters and message handlers as described below.
+You may now customize ChatBird experience as desired. The default implementation will give you a working chat controller but you can subclass `ChatViewController` to provide your own input presenters and message handlers as described below.
 
 ## Usage
 
@@ -49,7 +49,7 @@ You may now ChatBird experience as desired. The default implementation will give
 
 To instantiate and present a new `ChatViewController` setup your code as follows:
 
-```
+```Swift
 let channel: SBDGroupChannel // This is the SendBird Group Channel to present in the chat view
 
 let chatViewController = ChatViewController()

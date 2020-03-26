@@ -31,7 +31,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ChatBird: 2322c26484058231461bc86a0ebbd0f92d30dd94
+  ChatBird: 6ca4f6bff9a7d28862050844d40e302a5bc927d8
   Chatto: 3b4d5b8c56156dfa94caafc2bd4b3b42efb809a0
   ChattoAdditions: abd81bf223d15b4cdd82e23d675a2a286c150d56
   Nuke: d780e3507a86b86c589ab3cc5cd302d5456f06fb
