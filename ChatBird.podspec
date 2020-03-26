@@ -27,9 +27,9 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/velos/ChatBird.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.platform = :ios, '12.0'
-  s.ios.deployment_target = '12.0'
-  s.swift_version = '5.0'
+  s.platform = :ios, '11.0'
+  s.ios.deployment_target = '11.0'
+  s.swift_version = '4.2'
   s.source_files = 'ChatBird/Classes/**/*'
   s.resources = 'ChatBird/**/*.{png,jpeg,jpg,storyboard,xib,xcassets}'
   
