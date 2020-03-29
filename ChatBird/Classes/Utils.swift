@@ -225,7 +225,7 @@ public class UserQueryViewModel {
     
     public init() { }
     
-    public func queryUserList(searchText: String = "", refresh: Bool = true, _ completion: @escaping () -> Void) {
+    public func queryUserList(searchText: String = "", refresh: Bool = true, _ completion: @escaping (Bool) -> Void) {
         if refresh {
             query = nil
         }
@@ -237,14 +237,14 @@ public class UserQueryViewModel {
         }
         
         guard query?.hasNext == true else {
-            completion()
+            completion(false)
             return
         }
         
         query?.loadNextPage(completionHandler: { [weak self] (userArray, error) in
             guard error == nil else {
                 print("Error loading user list: \(error?.localizedDescription ?? "")")
-                completion()
+                completion(false)
                 return
             }
             
@@ -257,7 +257,7 @@ public class UserQueryViewModel {
                 }
                 self?.users.append(user)
             }
-            completion()
+            completion(true)
         })
     }
 }

@@ -105,6 +105,8 @@ class NewChatController: UIViewController {
     var userQueryViewModel = UserQueryViewModel()
     var searchController: UISearchController?
     
+    private var isLoading: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -146,9 +148,15 @@ class NewChatController: UIViewController {
     }
     
     func loadUserList(refresh: Bool = true) {
-        userQueryViewModel.queryUserList(refresh: refresh) { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
+        if !isLoading {
+            isLoading = true
+            userQueryViewModel.queryUserList(refresh: refresh) { [weak self] (didRefresh) in
+                DispatchQueue.main.async {
+                    if didRefresh {
+                        self?.tableView.reloadData()
+                    }
+                    self?.isLoading = false
+                }
             }
         }
     }
@@ -161,7 +169,7 @@ class NewChatController: UIViewController {
     }
 }
 
-extension NewChatController: UITableViewDelegate, UITableViewDataSource {
+extension NewChatController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userQueryViewModel.users.count
     }
@@ -178,10 +186,6 @@ extension NewChatController: UITableViewDelegate, UITableViewDataSource {
         cell.selectedBackgroundView = backgroundView
 
         cell.user = userQueryViewModel.users[indexPath.row]
-        
-        if userQueryViewModel.users.count > 0 && indexPath.row == userQueryViewModel.users.count - 1 {
-            loadUserList(refresh: false)
-        }
         
         return cell
     }
@@ -208,6 +212,15 @@ extension NewChatController: UITableViewDelegate, UITableViewDataSource {
         }
         else {
             tableView.deselectRow(at: indexPath, animated: false)
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let height = scrollView.frame.size.height
+        let contentYoffset = scrollView.contentOffset.y
+        let distanceFromBottom = scrollView.contentSize.height - contentYoffset
+        if distanceFromBottom < height {
+            loadUserList(refresh: false)
         }
     }
 }
@@ -240,9 +253,11 @@ extension NewChatController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        userQueryViewModel.queryUserList(searchText: searchText) {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+        userQueryViewModel.queryUserList(searchText: searchText) { (didLoadData) in
+            if didLoadData {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
