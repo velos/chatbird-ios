@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="LSP-7i-0sU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="LSP-7i-0sU">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -100,14 +100,14 @@
                                 <rect key="frame" x="0.0" y="44" width="375" height="574"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="conversationListTableViewCell" rowHeight="72" translatesAutoresizingMaskIntoConstraints="NO" id="6wx-2p-jDx" customClass="ConversationListTableViewCell" customModule="ChatBird_Example" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="conversationListTableViewCell" rowHeight="72" translatesAutoresizingMaskIntoConstraints="NO" id="6wx-2p-jDx" customClass="ConversationListTableViewCell" customModule="ChatBird_Example" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="72"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6wx-2p-jDx" id="TSO-0t-TvX">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="72"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8ph-qT-UIJ" customClass="AvatarView" customModule="ChatBird">
+                                                <view contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8ph-qT-UIJ" customClass="AvatarView" customModule="ChatBird">
                                                     <rect key="frame" x="12" y="12" width="48" height="48"/>
                                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
@@ -427,7 +427,7 @@ Tap the button above to start one.</string>
                                 </connections>
                             </collectionView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="VgE-yb-2YQ">
-                                <rect key="frame" x="0.0" y="134" width="375" height="505"/>
+                                <rect key="frame" x="0.0" y="134" width="375" height="513"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SelectableUserTableViewCell" rowHeight="70" id="2it-n0-lqk" customClass="SelectableUserTableViewCell" customModule="ChatBird_Example" customModuleProvider="target">
@@ -489,7 +489,7 @@ Tap the button above to start one.</string>
                             <constraint firstAttribute="trailing" secondItem="VgE-yb-2YQ" secondAttribute="trailing" id="Ycu-GK-NcN"/>
                             <constraint firstItem="mH5-3I-B5H" firstAttribute="top" secondItem="eYH-u0-aYa" secondAttribute="bottom" constant="8" symbolic="YES" id="t2b-8j-z4k"/>
                             <constraint firstItem="VgE-yb-2YQ" firstAttribute="top" secondItem="mH5-3I-B5H" secondAttribute="bottom" id="vCS-Hu-Wjd"/>
-                            <constraint firstItem="AS2-Ck-KwM" firstAttribute="top" secondItem="VgE-yb-2YQ" secondAttribute="bottom" constant="8" symbolic="YES" id="vol-gN-tje"/>
+                            <constraint firstAttribute="bottom" secondItem="VgE-yb-2YQ" secondAttribute="bottom" id="vol-gN-tje"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="0ur-8K-IGt">
@@ -939,6 +939,9 @@ Tap the button above to start one.</string>
             <point key="canvasLocation" x="1873" y="1207"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="8RF-IL-Cvn"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="camera" width="20" height="16"/>
         <image name="ellipses.bubble.fill" width="19" height="18"/>
@@ -946,7 +949,4 @@ Tap the button above to start one.</string>
         <image name="minus.circle.fill" width="17" height="17"/>
         <image name="plus.bubble" width="19" height="18"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="8RF-IL-Cvn"/>
-    </inferredMetricsTieBreakers>
 </document>

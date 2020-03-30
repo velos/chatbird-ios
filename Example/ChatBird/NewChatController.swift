@@ -147,16 +147,17 @@ class NewChatController: UIViewController {
     }
     
     func loadUserList(refresh: Bool = true) {
-        if !isLoading {
-            isLoading = true
-            userQueryViewModel.queryUserList(refresh: refresh) { [weak self] (didRefresh) in
-                DispatchQueue.main.async {
-                    if didRefresh {
-                        self?.tableView.reloadData()
-                    }
-                    self?.isLoading = false
-                    self?.tableView.refreshControl?.endRefreshing()
+        guard isLoading == false else { return }
+
+        isLoading = true
+        userQueryViewModel.queryUserList(refresh: refresh) { [weak self] (didLoadData) in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                if didLoadData {
+                    self.tableView.reloadData()
                 }
+                self.isLoading = false
+                self.tableView.refreshControl?.endRefreshing()
             }
         }
     }
@@ -253,11 +254,10 @@ extension NewChatController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        userQueryViewModel.queryUserList(searchText: searchText) { (didLoadData) in
-            if didLoadData {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+        userQueryViewModel.queryUserList(searchText: searchText) { [weak self] (didLoadData) in
+            guard didLoadData == true, let self = self else { return }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
             }
         }
     }
