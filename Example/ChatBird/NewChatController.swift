@@ -156,6 +156,7 @@ class NewChatController: UIViewController {
                         self?.tableView.reloadData()
                     }
                     self?.isLoading = false
+                    self?.tableView.refreshControl?.endRefreshing()
                 }
             }
         }
