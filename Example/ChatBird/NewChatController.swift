@@ -27,6 +27,7 @@
 
 import UIKit
 import SendBirdSDK
+import ChatBird
 import Nuke
 
 class SelectableUserTableViewCell: UITableViewCell {
@@ -100,9 +101,11 @@ class NewChatController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var nextButton: UIBarButtonItem!
 
-    var users: [SBDUser] = []
     var userListQuery: SBDApplicationUserListQuery?
+    var userQueryViewModel = UserQueryViewModel()
     var searchController: UISearchController?
+    
+    private var isLoading: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,42 +147,19 @@ class NewChatController: UIViewController {
     }
     
     func loadUserList(refresh: Bool = true) {
-        if refresh {
-            userListQuery = nil
-        }
-        
-        if self.userListQuery == nil {
-            userListQuery = SBDMain.createApplicationUserListQuery()
-            userListQuery?.limit = 20
-        }
-        
-        guard userListQuery?.hasNext == true else { return }
-        
-        userListQuery?.loadNextPage(completionHandler: { [weak self] (users, error) in
+        guard isLoading == false else { return }
+
+        isLoading = true
+        userQueryViewModel.queryUserList(refresh: refresh) { [weak self] (didLoadData) in
+            guard let self = self else { return }
             DispatchQueue.main.async {
-                self?.tableView.refreshControl?.endRefreshing()
-            }
-            
-            guard error == nil else {
-                print("error loading user list: \(error?.localizedDescription ?? "")")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                if refresh {
-                    self?.users.removeAll()
+                if didLoadData {
+                    self.tableView.reloadData()
                 }
-                
-                for user in users! {
-                    if user.userId == SBDMain.getCurrentUser()!.userId {
-                        continue
-                    }
-                    self?.users.append(user)
-                }
-                
-                self?.tableView.reloadData()
+                self.isLoading = false
+                self.tableView.refreshControl?.endRefreshing()
             }
-        })
+        }
     }
     
     func updateViews() {
@@ -190,9 +170,9 @@ class NewChatController: UIViewController {
     }
 }
 
-extension NewChatController: UITableViewDelegate, UITableViewDataSource {
+extension NewChatController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.users.count
+        return userQueryViewModel.users.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -206,24 +186,20 @@ extension NewChatController: UITableViewDelegate, UITableViewDataSource {
         backgroundView.backgroundColor = .white
         cell.selectedBackgroundView = backgroundView
 
-        cell.user = self.users[indexPath.row]
-        
-        if self.users.count > 0 && indexPath.row == self.users.count - 1 {
-            loadUserList(refresh: false)
-        }
+        cell.user = userQueryViewModel.users[indexPath.row]
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedUsers.append(users[indexPath.row])
+        selectedUsers.append(userQueryViewModel.users[indexPath.row])
 
         updateViews()
         selectedUserView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if let index = selectedUsers.firstIndex(of: users[indexPath.row]) {
+        if let index = selectedUsers.firstIndex(of: userQueryViewModel.users[indexPath.row]) {
             selectedUsers.remove(at: index)
         }
         
@@ -232,11 +208,20 @@ extension NewChatController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if self.selectedUsers.contains(self.users[indexPath.row]) {
+        if self.selectedUsers.contains(userQueryViewModel.users[indexPath.row]) {
             tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
         }
         else {
             tableView.deselectRow(at: indexPath, animated: false)
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let height = scrollView.frame.size.height
+        let contentYoffset = scrollView.contentOffset.y
+        let distanceFromBottom = scrollView.contentSize.height - contentYoffset
+        if distanceFromBottom < height {
+            loadUserList(refresh: false)
         }
     }
 }
@@ -269,22 +254,11 @@ extension NewChatController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        userListQuery = SBDMain.createApplicationUserListQuery()
-        userListQuery?.userIdsFilter = [searchText]
-        userListQuery?.loadNextPage(completionHandler: { [weak self] (users, error) in
-            guard error == nil else { return }
+        userQueryViewModel.queryUserList(searchText: searchText) { [weak self] (didLoadData) in
+            guard didLoadData == true, let self = self else { return }
             DispatchQueue.main.async {
-                self?.tableView.refreshControl?.endRefreshing()
-                self?.users.removeAll()
-                for user in users ?? [] {
-                    if user.userId == SBDMain.getCurrentUser()!.userId {
-                        continue
-                    }
-                    self?.users.append(user)
-                }
-                
-                self?.tableView.reloadData()
+                self.tableView.reloadData()
             }
-        })
+        }
     }
 }

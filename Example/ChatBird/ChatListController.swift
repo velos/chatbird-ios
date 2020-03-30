@@ -89,8 +89,6 @@ class ChatListController: UIViewController, UITableViewDelegate, UITableViewData
                 }
 
                 self?.updateConversations()
-
-                self?.checkNoContent()
             }
 
             if let error = error {
@@ -101,6 +99,7 @@ class ChatListController: UIViewController, UITableViewDelegate, UITableViewData
     
     func updateConversations() {
         tableView.reloadData()
+        checkNoContent()
     }
     
     /// Updates channel when callback received

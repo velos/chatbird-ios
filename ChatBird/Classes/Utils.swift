@@ -105,6 +105,39 @@ extension String {
     }
 }
 
+extension Date {
+    static let dateFormatter = DateFormatter()
+    var lastActivityFormattedString: String {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone.current
+        let current = Date()
+
+        if calendar.isDateInToday(self) {
+            Date.dateFormatter.doesRelativeDateFormatting = false
+            Date.dateFormatter.setLocalizedDateFormatFromTemplate("jj:mm")
+        }
+        else if calendar.isDateInYesterday(self) {
+            Date.dateFormatter.timeStyle = .none
+            Date.dateFormatter.dateStyle = .medium
+            Date.dateFormatter.doesRelativeDateFormatting = true
+        }
+        else if calendar.dateComponents([.day], from: self, to: current).day ?? 0 < 7 {
+            Date.dateFormatter.doesRelativeDateFormatting = false
+            Date.dateFormatter.setLocalizedDateFormatFromTemplate("E")
+        }
+        else if calendar.dateComponents([.year], from: self, to: current).year ?? 0 < 1 {
+            Date.dateFormatter.doesRelativeDateFormatting = false
+            Date.dateFormatter.setLocalizedDateFormatFromTemplate("MMMd")
+        }
+        else {
+            Date.dateFormatter.doesRelativeDateFormatting = false
+            Date.dateFormatter.timeStyle = .none
+            Date.dateFormatter.dateStyle = .short
+        }
+        return Date.dateFormatter.string(from: self)
+    }
+}
+
 extension SBDGroupChannel {
     /// Returns sorted list of members to display - edit this to change sorting
     public var membersString: String {
@@ -140,11 +173,91 @@ extension SBDGroupChannel {
         let members: [SBDMember] = (self.members ?? []).compactMap { $0 as? SBDMember }
         return members.compactMap { $0.userId == SBDMain.getCurrentUser()?.userId ? nil : $0 }
     }
+    
+    /// Returns text to display for last message sent
+    public var lastMessageString: String {
+        var lastMessage: String = ""
+        
+        if let adminMessage = self.lastMessage as? SBDAdminMessage {
+            lastMessage = adminMessage.message ?? ""
+        }
+        else if let userMessage = self.lastMessage as? SBDUserMessage {
+            lastMessage = userMessage.message ?? ""
+        }
+        else if let fileMessage = self.lastMessage as? SBDFileMessage {
+            if fileMessage.type.hasPrefix("image") {
+                lastMessage = "📷 Photo"
+            }
+            else if fileMessage.type.hasPrefix("video") {
+                lastMessage = "🎥 Video"
+            }
+            else if fileMessage.type.hasPrefix("audio") {
+                lastMessage = "🔈 Audio"
+            }
+            else {
+                lastMessage = "📄 File"
+            }
+        }
+
+        return lastMessage
+    }
+    
+    public var lastDateString: String {
+        if let lastMessage = self.lastMessage {
+            return Date(timeIntervalSince1970: Double(lastMessage.createdAt) / 1000.0).lastActivityFormattedString
+        }
+        else {
+            return Date(timeIntervalSince1970: Double(self.createdAt) / 1000.0).lastActivityFormattedString
+        }
+    }
 }
 
 extension SBDUser {
     /// Returns user's nickname (or userId, if missing) for display
     public var displayName: String? {
         return (self.nickname?.isEmpty ?? true) ? self.userId : self.nickname
+    }
+}
+
+public class UserQueryViewModel {
+    var query: SBDApplicationUserListQuery?
+    public var users: [SBDUser] = []
+    
+    public init() { }
+    
+    public func queryUserList(searchText: String = "", refresh: Bool = true, _ completion: @escaping (Bool) -> Void) {
+        if refresh {
+            query = nil
+        }
+        
+        if query == nil {
+            query = SBDMain.createApplicationUserListQuery()
+            query?.userIdsFilter = [searchText]
+            query?.limit = 20
+        }
+        
+        guard query?.hasNext == true else {
+            completion(false)
+            return
+        }
+        
+        query?.loadNextPage(completionHandler: { [weak self] (userArray, error) in
+            guard error == nil else {
+                print("Error loading user list: \(error?.localizedDescription ?? "")")
+                completion(false)
+                return
+            }
+            
+            if refresh {
+                self?.users.removeAll()
+            }
+            for user in userArray ?? [] {
+                if user.userId == SBDMain.getCurrentUser()!.userId {
+                    continue
+                }
+                self?.users.append(user)
+            }
+            completion(true)
+        })
     }
 }
