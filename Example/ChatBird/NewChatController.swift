@@ -113,8 +113,7 @@ class NewChatController: UIViewController {
         searchController = UISearchController(searchResultsController: nil)
         searchController?.searchBar.delegate = self
         searchController?.searchBar.placeholder = "Search"
-        searchController?.searchBar.searchTextField.clearButtonMode = .always
-        searchController?.searchBar.searchTextField.autocapitalizationType = .none
+        searchController?.searchBar.autocapitalizationType = .none
 
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
