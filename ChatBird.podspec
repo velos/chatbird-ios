@@ -7,10 +7,9 @@ Pod::Spec.new do |s|
                         This pod provides the glue to connect the SendBird chat service with the Chatto UI.
                         DESC
   s.homepage         = 'https://github.com/velos/chatbird-ios'
-  s.screenshots     = 'https://github.com/velos/chatbird-ios/raw/master/ChatBird.gif'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'David Rajan' => 'david@velosmobile.com' }
-  s.source           = { :git => 'https://github.com/velos/ChatBird.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/velos/chatbird-ios.git', :tag => s.version.to_s }
   s.platform = :ios, '12.0'
   s.ios.deployment_target = '12.0'
   s.swift_version = '5.0'
